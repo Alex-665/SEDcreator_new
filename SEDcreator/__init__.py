@@ -13,7 +13,7 @@ bl_info = {
 }
 
 # Register
-modulesNames = ['SEDcreator', 'createCluster', 'utils']
+modulesNames = ['SEDcreator', 'SEDcreator_createCluster', 'SEDcreator_utils', 'SEDcreator_setupClasses', 'SEDcreator_renderClasses']
 
 modulesFullNames = {}
 for currentModuleName in modulesNames:

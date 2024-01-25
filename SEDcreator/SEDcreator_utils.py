@@ -2,6 +2,14 @@ import bpy
 import math
 
 # Useful functions for all the project
+def inCube(obj_location, x_min, x_max, y_min, y_max, z_min, z_max):
+    return (obj_location.x >= x_min and obj_location.x <= x_max) and (obj_location.y >= y_min and obj_location.y <= y_max) and (obj_location.z >= z_min and obj_location.z <= z_max)
+
+def createCamera(angle, lens):
+    cam = bpy.data.cameras.new("Camera")
+    cam.lens_unit = lens
+    cam.angle = math.radians(angle)
+    return cam
 
 def createCameraObj(context, name, cam, loc=(0.0, 0.0, 0.0), rot=(0.0, 0.0, 0.0)):
     radiansRot = tuple([math.radians(a)

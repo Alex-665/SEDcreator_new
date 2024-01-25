@@ -3,8 +3,10 @@ import os
 import bpy
 import math
 
-from SEDcreator import createCluster
-from SEDcreator import utils
+from SEDcreator import SEDcreator_createCluster
+from SEDcreator import SEDcreator_utils
+from SEDcreator import SEDcreator_setupClasses
+from SEDcreator import SEDcreator_renderClasses
 
 #définir un xmax, xmin, etc que l'utilisateur entrera et les sphères seront dessinées de manière à être dans cet espace
 
@@ -22,7 +24,11 @@ class sedPanel(bpy.types.Panel):
         domeShape = setupProp.domeShape
 
         pan_col1 = layout.column()
+        pan_col2 = layout.column()
+        pan_col3 = layout.column()
         pan_col1.label(text="Scene Management")
+        pan_col2.label(text="Delimitations")
+        pan_col3.label(text="Setup cameras")
         row = pan_col1.row()
         row.operator('object.sed_settings')
         row = pan_col1.row()
@@ -41,10 +47,27 @@ class sedPanel(bpy.types.Panel):
             row = pan_col1.row()
             row.prop(setupProp, "nbRing")
 
+        row = pan_col1.row()
         layout.separator()
 
-        row = pan_col1.row()
-        row.operator('object.sed_setup')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'x_min')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'x_max')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'y_min')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'y_max')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'z_min')
+        row2 = pan_col2.row()
+        row2.prop(setupProp, 'z_max')
+
+        row2 = pan_col2.row()
+        layout.separator()
+
+        row3 = pan_col3.row()
+        row3.operator('object.sed_setup')
 #       if setupProp.renderReady:
 #
 #           layout.separator()
@@ -122,79 +145,18 @@ class SettingsOperator(bpy.types.Operator):
 class InfoAdd(bpy.types.PropertyGroup):
     camNumber: bpy.props.IntProperty(name = "Number of cameras in the whole scanrig collections")
 
-class SetupOperator(bpy.types.Operator):
-    bl_idname = "object.sed_setup"
-    bl_label = "Set Project Setup"
-    bl_description = "Setup the scene with all the selected empty objects"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        selected = context.selected_objects
-        for obj in selected:
-            if obj.type == 'EMPTY':
-                createCluster.create(context, obj)
-        return {'FINISHED'}
-
-
-
-class SetupProperties(bpy.types.PropertyGroup):
-
-    renderReady: bpy.props.BoolProperty(name="Toggle Option")
-    domeShape: bpy.props.EnumProperty(name='Camera Dome Shape', description='Choose the shape of the camera dome',
-                                      items={
-                                          ('I', 'Icosahedron',
-                                            'Place the cameras along the vertices of an Icosahedron'),
-                                          ('SI', 'Semi Icosahedron',
-                                            'Place the cameras along the vertices of a Icosahedron dome'),
-                                          ('U', 'UV Sphere',
-                                           'Place the cameras along the vertices of an UV Sphere'),
-                                          ('SS', 'Semi Sphere',
-                                          'Place the cameras along the vertices of a dome')
-                                      }, default='I')
-
-    orientationCameras: bpy.props.EnumProperty(name="Cameras Orientation",
-                                       description="Inward or outward orientation of cameras",
-                                       items={
-                                               ('I', 'Inward', 'Orient cameras inward'),
-                                               ('O', 'Outward', 'Orient cameras outward'),
-                                               ('F', 'Focus', 'Orient cameras to focus on the selectionned object'),
-                                             }, default='I')
-
-    clusterRadius: bpy.props.FloatProperty(name="Radius of the cluster",
-                                          description="Radius of the cluster of cameras", default=1,
-                                          min=0, max=10)  # In meters
-
-    # - Icosahedron and Semi Icosahedron
-    nbSubdiv: bpy.props.IntProperty(name="Number of Subdivisions", description="Number of dome shape's subdivisions",
-                                    default=1, min=1, max=3, step=1)
-
-    # - UV Sphere and Semi Sphere
-    nbSegment: bpy.props.IntProperty(name="Number of segments", description="Number of sphere's rings", default=16,
-                                     min=3, max=32, step=1)
-    nbRing: bpy.props.IntProperty(name="Number of rings", description="Number of sphere's rings", default=8, min=3,
-                                  max=16, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-    x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
-
-
-classes = [sedPanel, SettingsOperator, InfoAdd, SetupOperator, SetupProperties]
+classes = [sedPanel, SettingsOperator, InfoAdd]
 
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.types.Scene.SetupProperties = bpy.props.PointerProperty(type=SetupProperties)
     bpy.types.Scene.InfoAdd = bpy.props.PointerProperty(type=InfoAdd)
 
 
 def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
-    del bpy.types.Scene.SetupProperties
     del bpy.types.Scene.InfoAdd
 
 
