@@ -68,40 +68,43 @@ class sedPanel(bpy.types.Panel):
 
         row3 = pan_col3.row()
         row3.operator('object.sed_setup')
-#       if setupProp.renderReady:
-#
-#           layout.separator()
-#
-#           pan_col3 = layout.column()
-#           pan_col3.label(text="Render Management")
-#
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_albedo")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_depth")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_normal")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_id")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_beauty")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_roughness")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_curvature")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "bool_transmission")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "exportFolder")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "start")
-#           row = pan_col3.row()
-#           row.prop(setupProp, "end")
-#           row = pan_col3.row()
-#           row.operator('object.scanrig_render')
-#       else:
-#           row = layout.row()
-#           row.label(text="Render not ready")
+
+        if context.scene.RenderProperties.renderReady:
+
+            layout.separator()
+
+            pan_col4 = layout.column()
+            pan_col4.label(text="Render Management")
+
+            renderProp = context.scene.RenderProperties
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_albedo")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_depth")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_normal")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_id")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_beauty")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_roughness")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_curvature")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_transmission")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "exportFolder")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "start")
+            row4 = pan_col4.row()
+            row4.prop(renderProp, "end")
+            row4 = pan_col4.row()
+            row4.operator('object.sed_render')
+        else:
+            row = layout.row()
+            row.label(text="Render not ready")
+
 
 # ---------- Project settings ----------#
 class SettingsOperator(bpy.types.Operator):

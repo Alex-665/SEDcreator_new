@@ -16,6 +16,9 @@ class SetupOperator(bpy.types.Operator):
         for obj in selected:
             if obj.type == 'EMPTY':
                 SEDcreator_createCluster.create(context, obj)
+
+        context.scene.RenderProperties.renderReady = True  # Set rendering Ready
+
         return {'FINISHED'}
 
 
