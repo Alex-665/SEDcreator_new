@@ -13,15 +13,54 @@ class SetupOperator(bpy.types.Operator):
 
     def execute(self, context):
         selected = context.selected_objects
+        self.createSEDCollections(context)
+
         for obj in selected:
             if obj.type == 'EMPTY':
                 SEDcreator_createCluster.create(context, obj)
+                self.linkEmptyToCollection(obj, context)
 
         context.scene.RenderProperties.renderReady = True  # Set rendering Ready
-
         return {'FINISHED'}
 
+    def linkEmptyToCollection(self, object, context):
+        if context.scene.SetupProperties.domeShape == 'I':
+            self.linkObjectHierarchyToCollection(object, context, "IcoSEDCollection")
+        elif context.scene.SetupProperties.domeShape == 'SI':
+            self.linkObjectHierarchyToCollection(object, context, "SemiIcoSEDCollection")
+        elif context.scene.SetupProperties.domeShape == 'U':
+            self.linkObjectHierarchyToCollection(object, context, "SphereSEDCollection")
+        else:
+            self.linkObjectHierarchyToCollection(object, context, "SemiSphereSEDCollection")
 
+    def linkObjectHierarchyToCollection(self, object, context, collectionName):
+        children = object.children_recursive
+        for child in children:
+            context.scene.collection.objects.unlink(child)
+            bpy.data.collections[collectionName].objects.link(child)
+        context.scene.collection.objects.unlink(object)
+        bpy.data.collections[collectionName].objects.link(object)
+
+    def collectionExists(self, context, collectionName):
+        collections = context.scene.collection.children
+        for collection in collections:
+            if collection.name == collectionName:
+                return True
+        return False
+
+    def createSEDCollections(self, context):
+        if not self.collectionExists(context, "IcoSEDCollection"):
+            icoCollection = bpy.data.collections.new("IcoSEDCollection")
+            context.scene.collection.children.link(icoCollection)
+        if not self.collectionExists(context, "SemiIcoSEDCollection"):
+            semiIcoCollection = bpy.data.collections.new("SemiIcoSEDCollection")
+            context.scene.collection.children.link(semiIcoCollection)
+        if not self.collectionExists(context, "SphereSEDCollection"):
+            sphereCollection = bpy.data.collections.new("SphereSEDCollection")
+            context.scene.collection.children.link(sphereCollection)
+        if not self.collectionExists(context, "SemiSphereSEDCollection"):
+            semiSphereCollection = bpy.data.collections.new("SemiSphereSEDCollection")
+            context.scene.collection.children.link(semiSphereCollection)
 
 class SetupProperties(bpy.types.PropertyGroup):
 
@@ -36,6 +75,10 @@ class SetupProperties(bpy.types.PropertyGroup):
                                            'Place the cameras along the vertices of an UV Sphere'),
                                           ('SS', 'Semi Sphere',
                                           'Place the cameras along the vertices of a dome')
+                                         # ('AI', 'Adaptative Icosahedron',
+                                         #  'Place the cameras along the vertices of a Icosahedron dome that is limited by the bounding box'),
+                                         # ('AS', 'Adaptative UV Sphere',
+                                         #  'Place the cameras along the vertices of a UV Sphere that is limited by the bounding box')
                                       }, default='I')
 
     orientationCameras: bpy.props.EnumProperty(name="Cameras Orientation",

@@ -31,7 +31,7 @@ def create(context, object):
 
         co_final = shape.matrix_world @ v.co
         if  SEDcreator_utils.inCube(co_final, x_min, x_max, y_min, y_max, z_min, z_max):
-            camName = f"Camera_{context.scene.InfoAdd.camNumber + i}"
+            camName = f"Camera_{context.scene.InfoSED.camNumber + i}"
             current_cam = SEDcreator_utils.createCameraObj(context, camName, cam, (object.location.x + setup_properties.clusterRadius, 0, 0), (90, 0, 90))
             #to keep the cameras where they should be after parenting operation
             current_cam.parent = object

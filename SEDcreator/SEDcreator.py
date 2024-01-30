@@ -8,8 +8,6 @@ from SEDcreator import SEDcreator_utils
 from SEDcreator import SEDcreator_setupClasses
 from SEDcreator import SEDcreator_renderClasses
 
-#définir un xmax, xmin, etc que l'utilisateur entrera et les sphères seront dessinées de manière à être dans cet espace
-
 #-------- Panel --------#
 class sedPanel(bpy.types.Panel):
     bl_idname = 'SEDCREATOR_PT_sedcreator'
@@ -105,7 +103,6 @@ class sedPanel(bpy.types.Panel):
             row = layout.row()
             row.label(text="Render not ready")
 
-
 # ---------- Project settings ----------#
 class SettingsOperator(bpy.types.Operator):
     bl_idname = "object.sed_settings"
@@ -145,23 +142,23 @@ class SettingsOperator(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class InfoAdd(bpy.types.PropertyGroup):
+class InfoSED(bpy.types.PropertyGroup):
     camNumber: bpy.props.IntProperty(name = "Number of cameras in the whole scanrig collections")
+    collections: bpy.props.BoolProperty(description="Bool for collections creation")
 
-classes = [sedPanel, SettingsOperator, InfoAdd]
+classes = [sedPanel, SettingsOperator, InfoSED]
 
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.types.Scene.InfoAdd = bpy.props.PointerProperty(type=InfoAdd)
+    bpy.types.Scene.InfoSED = bpy.props.PointerProperty(type=InfoSED)
 
 
 def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
-    del bpy.types.Scene.InfoAdd
-
+    del bpy.types.Scene.InfoSED
 
 if __name__ == "__main__":
     register()
