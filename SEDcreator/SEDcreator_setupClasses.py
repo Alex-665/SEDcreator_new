@@ -81,7 +81,7 @@ class SetupOperator(bpy.types.Operator):
 class SetupProperties(bpy.types.PropertyGroup):
 
     renderReady: bpy.props.BoolProperty(name="Toggle Option")
-    domeShape: bpy.props.EnumProperty(name='Camera Dome Shape', description='Choose the shape of the camera dome',
+    domeShape: bpy.props.EnumProperty(name='Shape type', description='Choose the shape of the camera dome',
                                       items={
                                           ('I', 'Icosahedron',
                                             'Place the cameras along the vertices of an Icosahedron'),
@@ -105,7 +105,7 @@ class SetupProperties(bpy.types.PropertyGroup):
                                                ('F', 'Focus', 'Orient cameras to focus on the selectionned object'),
                                              }, default='I')
 
-    clusterRadius: bpy.props.FloatProperty(name="Radius of the cluster",
+    clusterRadius: bpy.props.FloatProperty(name="Cluster radius",
                                           description="Radius of the cluster of cameras", default=1,
                                           min=0, max=10)  # In meters
 
@@ -124,6 +124,8 @@ class SetupProperties(bpy.types.PropertyGroup):
     y_min: bpy.props.FloatProperty(name="y minimum", description="Minimum y coordinate where cameras are displayed", default=-100, min=-1000, max=1000, step=1)
     z_max: bpy.props.FloatProperty(name="z maximum", description="Maximum z coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
     z_min: bpy.props.FloatProperty(name="z minimum", description="Minimum z coordinate where cameras are displayed", default=-100, min=-1000, max=1000, step=1)
+
+    focalLength: bpy.props.FloatProperty(name="Focal length", description="Focal length of all cameras of the cluster in degree)")
 
 
 classes = [SetupOperator, SetupProperties]

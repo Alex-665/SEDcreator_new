@@ -26,7 +26,7 @@ def create(context, object):
     shape = bpy.context.selected_objects[0]
     shape.name = "shape_cluster"
     nbCameras = len(shape.data.vertices)
-    cam = SEDcreator_utils.createCamera(56, 'FOV')
+    cam = SEDcreator_utils.createCamera(context, 'FOV')
 
     for (i, elem) in enumerate(shape.data.vertices):
         # Get the vertices

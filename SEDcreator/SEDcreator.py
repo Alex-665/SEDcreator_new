@@ -36,6 +36,8 @@ class sedPanel(bpy.types.Panel):
         row.prop(setupProp, 'orientationCameras')
         row = pan_col1.row()
         row.prop(setupProp, 'clusterRadius')
+        row = pan_col1.row()
+        row.prop(setupProp, 'focalLength')
         if domeShape == "I" or domeShape == "SI":
             row = pan_col1.row()
             row.prop(setupProp, "nbSubdiv")
