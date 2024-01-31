@@ -31,6 +31,34 @@ def createCameraObj(context, name, cam, loc=(0.0, 0.0, 0.0), rot=(0.0, 0.0, 0.0)
 
     return obj
 
+def createCameraOnShape(context, object, shape, cam, vertice, position):
+    setup_properties = context.scene.SetupProperties
+    camName = f"Camera_{context.scene.InfoSED.camNumber}"
+    current_cam = createCameraObj(context, camName, cam, (object.location.x + setup_properties.clusterRadius, 0, 0), (90, 0, 90))
+    #to keep the cameras where they should be after parenting operation
+    current_cam.parent = object
+    current_cam.matrix_parent_inverse = object.matrix_world.inverted()
+    current_cam.select_set(True)
+    context.view_layer.objects.active = current_cam  # (could be improved)
+
+    current_cam.location = position
+    bpy.context.view_layer.update()
+    if setup_properties.orientationCameras == 'I':
+        look_at_in(current_cam, shape.matrix_world.to_translation())
+    elif setup_properties.orientationCameras == 'O':
+        look_at_out(current_cam, shape.matrix_world.to_translation())
+    else:
+       #if len(selected_objet) == 1:
+       #    #il y aura peut être un problème ici avec la liste des objets sélectionnés
+       #    look_at_select(current_cam, selected_objet[0])
+       #else:
+            look_at_in(current_cam, shape.matrix_world.to_translation())
+
+def deleteChildren(object):
+    children = object.children
+    for child in children:
+        bpy.data.objects.remove(child, do_unlink=True)
+
 def strVector3(v3):
     return str(v3.x) + "," + str(v3.y) + "," + str(v3.z)
 
