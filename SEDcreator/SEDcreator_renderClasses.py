@@ -2,6 +2,7 @@ import os
 import bpy
 
 from SEDcreator import SEDcreator_render
+from SEDcreator import SEDcreator_utils
 
 class RenderProperties(bpy.types.PropertyGroup):
     renderReady: bpy.props.BoolProperty(name="Toggle Option")
@@ -58,6 +59,7 @@ class RenderOperator(bpy.types.Operator):
     def execute(self, context):
 
         renderProp = context.scene.RenderProperties
+        #il ne faut plus qu'on ait cette condition
         if (renderProp.bool_beauty and (renderProp.bool_roughness or renderProp.bool_curvature)) or (renderProp.bool_roughness and (renderProp.bool_beauty or renderProp.bool_curvature)) or (renderProp.bool_curvature and (renderProp.bool_beauty or renderProp.bool_roughness)):
             self.report({'ERROR'}, "You can only select once between Beauty, Roughness and Curvature")
         else:
@@ -71,19 +73,24 @@ class RenderOperator(bpy.types.Operator):
             os.makedirs(imgDir, exist_ok=True)
 
             # Get the dome shape
-            domeShape = context.scene.RenderProperties.domeShape
+            domeShape = context.scene.SetupProperties.domeShape
 
             # ----------- GET OBJECTS -----------#
 
-            origin = bpy.context.scene.objects['Cameras']
+# à changer ici aussi
 
-            camerasObjs = [context.scene.objects[f'Camera_{nCam}'] for nCam in
-                      range(context.scene.RenderProperties.start, context.scene.RenderProperties.end + 1)]
+            #faire le renumber ici
+            #origin = bpy.context.scene.objects['Cameras']
+
+            sedCameras = SEDcreator_utils.getSEDCameras()
+            #camerasObjs = [context.scene.objects[f'Camera_{nCam}'] for nCam in
+            #          range(context.scene.RenderProperties.start, context.scene.RenderProperties.end + 1)]
+            camerasObjs = sedCameras[renderProp.start:renderProp.end]
 
             print("---------- Rendering start ----------")
 
             # ----------- PRE-RENDER -----------#
-            origin.rotation_euler[2] = 0
+            #origin.rotation_euler[2] = 0
             frame = bpy.context.scene.RenderProperties.start
             for cam in camerasObjs:
                 context.scene.frame_set(frame)

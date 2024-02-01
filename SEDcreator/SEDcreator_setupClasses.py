@@ -21,6 +21,7 @@ class SetupOperator(bpy.types.Operator):
                 self.linkEmptyToCollection(obj, context)
 
         context.scene.RenderProperties.renderReady = True  # Set rendering Ready
+        SEDcreator_utils.renumberSEDCameras()
         return {'FINISHED'}
 
     def linkEmptyToCollection(self, object, context):

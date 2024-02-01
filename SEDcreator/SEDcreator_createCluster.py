@@ -5,6 +5,7 @@ from SEDcreator import SEDcreator_utils
 # Creation of the cluster of cameras and link them to the associated empty
 
 def create(context, object):
+    nbCameras = 0
     setup_properties = context.scene.SetupProperties
     centerCluster = object.location
     domeShape = setup_properties.domeShape
@@ -25,7 +26,7 @@ def create(context, object):
 
     shape = bpy.context.selected_objects[0]
     shape.name = "shape_cluster"
-    nbCameras = len(shape.data.vertices)
+    nbVertices = len(shape.data.vertices)
     cam = SEDcreator_utils.createCamera(context, 'FOV')
 
     for (i, elem) in enumerate(shape.data.vertices):
@@ -35,10 +36,13 @@ def create(context, object):
 
         if  (domeShape == 'SI'or domeShape == 'SS') and (object.location.z - co_final.z <= 0):
             SEDcreator_utils.createCameraOnShape(context, object, shape, cam, v, co_final)
+            nbCameras += 1
         if (domeShape == 'AI' or domeShape == 'AS') and SEDcreator_utils.inCube(co_final, x_min, x_max, y_min, y_max, z_min, z_max):
             SEDcreator_utils.createCameraOnShape(context, object, shape, cam, v, co_final)
+            nbCameras += 1
         if domeShape == 'I' or domeShape == 'U':
             SEDcreator_utils.createCameraOnShape(context, object, shape, cam, v, co_final)
+            nbCameras += 1
 
     # Deselect all objects
     bpy.ops.object.select_all(action='DESELECT')
