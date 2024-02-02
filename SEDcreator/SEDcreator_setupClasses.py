@@ -20,8 +20,10 @@ class SetupOperator(bpy.types.Operator):
                 SEDcreator_createCluster.create(context, obj)
                 self.linkEmptyToCollection(obj, context)
 
+        camerasO = SEDcreator_utils.getSEDCameras()
+        print(camerasO)
+
         context.scene.RenderProperties.renderReady = True  # Set rendering Ready
-        SEDcreator_utils.renumberSEDCameras()
         return {'FINISHED'}
 
     def linkEmptyToCollection(self, object, context):

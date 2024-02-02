@@ -1,8 +1,8 @@
 import os
 import bpy
 
-from SEDcreator import SEDcreator_render
 from SEDcreator import SEDcreator_utils
+from SEDcreator import SEDcreator_renderUtils
 
 class RenderProperties(bpy.types.PropertyGroup):
     renderReady: bpy.props.BoolProperty(name="Toggle Option")
@@ -60,79 +60,42 @@ class RenderOperator(bpy.types.Operator):
 
         renderProp = context.scene.RenderProperties
         #il ne faut plus qu'on ait cette condition
-        if (renderProp.bool_beauty and (renderProp.bool_roughness or renderProp.bool_curvature)) or (renderProp.bool_roughness and (renderProp.bool_beauty or renderProp.bool_curvature)) or (renderProp.bool_curvature and (renderProp.bool_beauty or renderProp.bool_roughness)):
-            self.report({'ERROR'}, "You can only select once between Beauty, Roughness and Curvature")
-        else:
-            # Get the img folder path
-            filePath = bpy.data.filepath
-            curDir = os.path.dirname(filePath)
-            imgDir = os.path.join(
-                curDir, context.scene.RenderProperties.exportFolder)
+        #if (renderProp.bool_beauty and (renderProp.bool_roughness or renderProp.bool_curvature)) or (renderProp.bool_roughness and (renderProp.bool_beauty or renderProp.bool_curvature)) or (renderProp.bool_curvature and (renderProp.bool_beauty or renderProp.bool_roughness)):
+            #self.report({'ERROR'}, "You can only select once between Beauty, Roughness and Curvature")
+        # Get the img folder path
+        filePath = bpy.data.filepath
+        curDir = os.path.dirname(filePath)
+        imgDir = os.path.join(
+            curDir, context.scene.RenderProperties.exportFolder)
 
-            # Create the img folder if it does not exist
-            os.makedirs(imgDir, exist_ok=True)
+        # Create the img folder if it does not exist
+        os.makedirs(imgDir, exist_ok=True)
 
-            # Get the dome shape
-            domeShape = context.scene.SetupProperties.domeShape
+        # Get the dome shape
+        domeShape = context.scene.SetupProperties.domeShape
 
-            # ----------- GET OBJECTS -----------#
+        # ----------- GET OBJECTS -----------#
 
-# à changer ici aussi
+        #faire le renumber ici
+        #origin = bpy.context.scene.objects['Cameras']
 
-            #faire le renumber ici
-            #origin = bpy.context.scene.objects['Cameras']
+        SEDcreator_utils.renumberSEDCameras()
+        sedCameras = SEDcreator_utils.getSEDCameras()
+        #camerasObjs = [context.scene.objects[f'Camera_{nCam}'] for nCam in
+        #          range(context.scene.RenderProperties.start, context.scene.RenderProperties.end + 1)]
+        camerasObjs = sedCameras[renderProp.start:renderProp.end + 1]
 
-            sedCameras = SEDcreator_utils.getSEDCameras()
-            #camerasObjs = [context.scene.objects[f'Camera_{nCam}'] for nCam in
-            #          range(context.scene.RenderProperties.start, context.scene.RenderProperties.end + 1)]
-            camerasObjs = sedCameras[renderProp.start:renderProp.end]
+        print("---------- Rendering start ----------")
 
-            print("---------- Rendering start ----------")
+        # ----------- PRE-RENDER -----------#
+        #origin.rotation_euler[2] = 0
 
-            # ----------- PRE-RENDER -----------#
-            #origin.rotation_euler[2] = 0
-            frame = bpy.context.scene.RenderProperties.start
-            for cam in camerasObjs:
-                context.scene.frame_set(frame)
-                cam_data = bpy.data.cameras.new("cam_render")
-                cam_obj = bpy.data.objects.new("cam_render", cam_data)
-                cam_obj = cam
-                cam_obj.name = f"cam_render_{frame}"
-                context.scene.camera = cam_obj
-                SEDcreator_render.render(context, imgDir, f"{cam_obj.name}")
-                cam_obj.name = f"Camera_{frame}"
-                frame+=1
+        SEDcreator_renderUtils.launchRender(context, camerasObjs, imgDir)
+        #SEDcreator_renderUtils.launchRender("Roughness", context, camerasObjs, imgDir)
+        #SEDcreator_renderUtils.launchRender("Curvature", context, camerasObjs, imgDir)
+        print("rendering end")
 
-            if context.scene.RenderProperties.bool_roughness:
-                #get a list of all objects (selected)
-                bpy.ops.object.select_all(action='SELECT')
-                selected = bpy.context.selected_objects
-
-                #replace all material for these objects by their original texture images
-                for obj in selected:
-                    #we let the lights just in case
-                    if obj.type != 'CAMERA' and obj.type != 'LIGHT':
-                        SEDcreator_utils.replace_material_by_original(obj)
-                #deselect all objects    
-                bpy.ops.object.select_all(action='DESELECT')
-
-            if context.scene.RenderProperties.bool_curvature:
-                #get a list of all objects (selected)
-                bpy.ops.object.select_all(action='SELECT')
-                selected = bpy.context.selected_objects
-
-                #remove Attibute node from all materials
-                SEDcreator_utils.remove_attribute_from_all_materials()
-
-                #replace all material for these objects by their curvature map
-                for obj in selected:
-                    if obj.type != 'CAMERA' and obj.type != 'LIGHT':
-                        SEDcreator_utils.replace_material_by_original(obj)
-
-                #deselect all objects    
-                bpy.ops.object.select_all(action='DESELECT')
-
-            return {'FINISHED'}
+        return {'FINISHED'}
 
 classes = [RenderProperties, RenderOperator]
 
