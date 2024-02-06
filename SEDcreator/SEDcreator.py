@@ -35,6 +35,7 @@ class sedPanel(bpy.types.Panel):
         row = pan_col1.row()
         row.prop(setupProp, 'orientationCameras')
         row = pan_col1.row()
+        #mettre ici que l'on peut set un objet si on est en mode focus
         row.prop(setupProp, 'clusterRadius')
         row = pan_col1.row()
         row.prop(setupProp, 'focalLength')
@@ -155,7 +156,6 @@ def register():
     for c in classes:
         bpy.utils.register_class(c)
     bpy.types.Scene.InfoSED = bpy.props.PointerProperty(type=InfoSED)
-
 
 def unregister():
     for c in reversed(classes):

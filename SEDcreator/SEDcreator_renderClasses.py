@@ -2,7 +2,7 @@ import os
 import bpy
 
 from SEDcreator import SEDcreator_utils
-from SEDcreator import SEDcreator_renderUtils
+from SEDcreator import SEDcreator_launchRender
 
 class RenderProperties(bpy.types.PropertyGroup):
     renderReady: bpy.props.BoolProperty(name="Toggle Option")
@@ -90,9 +90,9 @@ class RenderOperator(bpy.types.Operator):
         # ----------- PRE-RENDER -----------#
         #origin.rotation_euler[2] = 0
 
-        SEDcreator_renderUtils.launchRender(context, camerasObjs, imgDir)
-        #SEDcreator_renderUtils.launchRender("Roughness", context, camerasObjs, imgDir)
-        #SEDcreator_renderUtils.launchRender("Curvature", context, camerasObjs, imgDir)
+        SEDcreator_launchRender.launchRender(context, camerasObjs, imgDir)
+        #SEDcreator_launchRender.launchRender("Roughness", context, camerasObjs, imgDir)
+        #SEDcreator_launchRender.launchRender("Curvature", context, camerasObjs, imgDir)
         print("rendering end")
 
         return {'FINISHED'}
