@@ -1,9 +1,8 @@
-import sys
+#import sys
 import os
-import math
-import re
+#import re
 import bpy
-from glob import glob
+#from glob import glob
 from SEDcreator import SEDcreator_prepareRender
 
 def renderCurvature(context, imgDir, imgName):
@@ -28,9 +27,6 @@ def renderCurvature(context, imgDir, imgName):
     format = "OPEN_EXR"
     color_depth = "16"
 
-    #fp = os.path.join(imgDir, imgName)
-    #print(imgDir)
-    #print(imgName)
     os.chdir("//")
 
     SEDcreator_prepareRender.prepareRenderCurvature(renderProp.bool_curvature, context, imgDir, imgName)

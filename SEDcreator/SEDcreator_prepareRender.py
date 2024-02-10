@@ -1,11 +1,11 @@
-import sys
+#import sys
 import os
-import math
-import re
+#import re
 import bpy
-from glob import glob
+#from glob import glob
 from SEDcreator import SEDcreator_utils
 
+# Functions to prepare the rendering
 def prepareRenderBeauty(bool_beauty, context, imgDir, imgName):
     if bool_beauty:
         path_beauty = os.path.join(imgDir, "beauty", imgName)
@@ -126,28 +126,28 @@ def prepareRenderTransmission(bool_transmission, nodes, links, format, color_dep
 
 def prepareRenderCurvature(bool_curvature, context, imgDir, imgName):
     if bool_curvature:
-        #create the node tree for our new modifier
+        # Create the node tree for our new modifier
         curvature = SEDcreator_utils.curvature_node_group()
         
-        #get a list of all objects (selected)
+        # Get a list of all objects (selected)
         bpy.ops.object.select_all(action='SELECT')
         selected = bpy.context.selected_objects
         
-        #create and apply our new modifier to all these objects
+        # Create and apply our new modifier to all these objects
         for obj in selected:
             if obj.type != 'CAMERA' and obj.type != 'LIGHT':
                 SEDcreator_utils.add_vertex_group(obj, "Curvature")
                 SEDcreator_utils.apply_modifier(obj, curvature)
         
-        #add Attibute node to all materials
+        # Add Attibute node to all materials
         SEDcreator_utils.add_attribute_to_all_materials()
         
-        #replace all material for these objects by their curvature map
+        # Replace all material for these objects by their curvature map
         for obj in selected:
             if obj.type != 'CAMERA' and obj.type != 'LIGHT':
                 SEDcreator_utils.replace_material_by_curvature(obj)
 
-        #deselect all objects    
+        # Deselect all objects    
         bpy.ops.object.select_all(action='DESELECT')
 
         path_curvature = os.path.join(imgDir, "curvature", imgName)
@@ -155,22 +155,24 @@ def prepareRenderCurvature(bool_curvature, context, imgDir, imgName):
 
 def prepareRenderRoughness(bool_roughness, context, imgDir, imgName):
     if bool_roughness:
-        #get a list of all objects (selected)
+        # Get a list of all objects (selected)
         bpy.ops.object.select_all(action='SELECT')
         selected = bpy.context.selected_objects
 
-        #replace all material for these objects by their roughness image
+        # Replace all material for these objects by their roughness image
         for obj in selected:
+            # Let the lights just in case
             if obj.type != 'CAMERA' and obj.type != 'LIGHT':
                 SEDcreator_utils.replace_material_by_roughness(obj)
 
-        #deselect all objects    
+        # Deselect all objects    
         bpy.ops.object.select_all(action='DESELECT')
 
         path_roughness = os.path.join(imgDir, "roughness", imgName)
         context.scene.render.filepath = path_roughness + "_roughness"
 
 def enableUsePasses(context):
+    # Enable by default all useful use_pass
     context.scene.use_nodes = True
     context.scene.view_layers["ViewLayer"].use_pass_z = True
     context.scene.view_layers["ViewLayer"].use_pass_normal = True
@@ -181,18 +183,18 @@ def enableUsePasses(context):
 def replaceObjectsByOriginals(renderType, context):
     renderProp = context.scene.RenderProperties
     if (renderType == "Roughness" and renderProp.bool_roughness) or (renderType == "Curvature" and renderProp.bool_curvature):
-        #get a list of all objects (selected)
+        # Get a list of all objects (selected)
         bpy.ops.object.select_all(action='SELECT')
         selected = bpy.context.selected_objects
 
         if renderType == "Curvature":
-            #remove Attibute node from all materials
+            # Remove Attibute node from all materials
             SEDcreator_utils.remove_attribute_from_all_materials()
 
-        #replace all material for these objects by their original texture images
+        # Replace all material for these objects by their original texture images
         for obj in selected:
-            #we let the lights just in case
+            # Let the lights just in case
             if obj.type != 'CAMERA' and obj.type != 'LIGHT':
                 SEDcreator_utils.replace_material_by_original(obj)
-        #deselect all objects    
+        # Deselect all objects    
         bpy.ops.object.select_all(action='DESELECT')

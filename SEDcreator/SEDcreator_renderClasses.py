@@ -42,8 +42,8 @@ class RenderProperties(bpy.types.PropertyGroup):
                                               description="Curvature mask",
                                               default=True
                                               )
+    # First and last frame of the rendering
     start: bpy.props.IntProperty(name="FirstFrame", default=0)
-
     end: bpy.props.IntProperty(name="LastFrame", default=1)
 
 class RenderOperator(bpy.types.Operator):
@@ -59,9 +59,7 @@ class RenderOperator(bpy.types.Operator):
     def execute(self, context):
 
         renderProp = context.scene.RenderProperties
-        #il ne faut plus qu'on ait cette condition
-        #if (renderProp.bool_beauty and (renderProp.bool_roughness or renderProp.bool_curvature)) or (renderProp.bool_roughness and (renderProp.bool_beauty or renderProp.bool_curvature)) or (renderProp.bool_curvature and (renderProp.bool_beauty or renderProp.bool_roughness)):
-            #self.report({'ERROR'}, "You can only select once between Beauty, Roughness and Curvature")
+
         # Get the img folder path
         filePath = bpy.data.filepath
         curDir = os.path.dirname(filePath)
@@ -74,26 +72,15 @@ class RenderOperator(bpy.types.Operator):
         # Get the dome shape
         domeShape = context.scene.SetupProperties.domeShape
 
-        # ----------- GET OBJECTS -----------#
-
-        #faire le renumber ici
-        #origin = bpy.context.scene.objects['Cameras']
-
-        SEDcreator_utils.renumberSEDCameras()
+        # Renumber the cameras
+        SEDcreator_utils.renumberSEDCameras(context)
         sedCameras = SEDcreator_utils.getSEDCameras()
-        #camerasObjs = [context.scene.objects[f'Camera_{nCam}'] for nCam in
-        #          range(context.scene.RenderProperties.start, context.scene.RenderProperties.end + 1)]
+        # Array of the cameras which render an image
         camerasObjs = sedCameras[renderProp.start:renderProp.end + 1]
 
         print("---------- Rendering start ----------")
-
-        # ----------- PRE-RENDER -----------#
-        #origin.rotation_euler[2] = 0
-
         SEDcreator_launchRender.launchRender(context, camerasObjs, imgDir)
-        #SEDcreator_launchRender.launchRender("Roughness", context, camerasObjs, imgDir)
-        #SEDcreator_launchRender.launchRender("Curvature", context, camerasObjs, imgDir)
-        print("rendering end")
+        print("---------- Rendering end ----------")
 
         return {'FINISHED'}
 

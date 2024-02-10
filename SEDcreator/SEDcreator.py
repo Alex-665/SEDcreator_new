@@ -1,14 +1,7 @@
-# ---------- Imports ----------#
-import os
+# Imports
 import bpy
-import math
 
-from SEDcreator import SEDcreator_createCluster
-from SEDcreator import SEDcreator_utils
-from SEDcreator import SEDcreator_setupClasses
-from SEDcreator import SEDcreator_renderClasses
-
-#-------- Panel --------#
+# Panel
 class sedPanel(bpy.types.Panel):
     bl_idname = 'SEDCREATOR_PT_sedcreator'
     bl_label = 'SEDcreator Panel'
@@ -22,34 +15,32 @@ class sedPanel(bpy.types.Panel):
         domeShape = setupProp.domeShape
 
         pan_col1 = layout.column()
-        pan_col2 = layout.column()
-        pan_col3 = layout.column()
         pan_col1.label(text="Scene Management")
-        pan_col2.label(text="Delimitations")
-        pan_col3.label(text="Setup cameras")
+
         row = pan_col1.row()
-        row.operator('object.sed_settings')
-        row = pan_col1.row()
-        row.prop(setupProp,
-                 "domeShape")  # Dome shape parameter
+        row.prop(setupProp, 'domeShape')
         row = pan_col1.row()
         row.prop(setupProp, 'orientationCameras')
+        if setupProp.orientationCameras == 'F':
+            row = pan_col1.row()
+            row.operator('object.sed_setfocus')
         row = pan_col1.row()
-        #mettre ici que l'on peut set un objet si on est en mode focus
         row.prop(setupProp, 'clusterRadius')
         row = pan_col1.row()
         row.prop(setupProp, 'focalLength')
-        if domeShape == "I" or domeShape == "SI":
+        if domeShape == "I" or domeShape == "SI" or domeShape == "AI":
             row = pan_col1.row()
             row.prop(setupProp, "nbSubdiv")
-        if domeShape == "U" or domeShape == "SS":
+        if domeShape == "U" or domeShape == "SS" or domeShape == "AS":
             row = pan_col1.row()
             row.prop(setupProp, "nbSegment")
             row = pan_col1.row()
             row.prop(setupProp, "nbRing")
-
         row = pan_col1.row()
         layout.separator()
+
+        pan_col2 = layout.column()
+        pan_col2.label(text="Delimitations")
 
         row2 = pan_col2.row()
         row2.prop(setupProp, 'x_min')
@@ -63,9 +54,11 @@ class sedPanel(bpy.types.Panel):
         row2.prop(setupProp, 'z_min')
         row2 = pan_col2.row()
         row2.prop(setupProp, 'z_max')
-
         row2 = pan_col2.row()
         layout.separator()
+
+        pan_col3 = layout.column()
+        pan_col3.label(text="Setup cameras")
 
         row3 = pan_col3.row()
         row3.operator('object.sed_setup')
@@ -106,61 +99,17 @@ class sedPanel(bpy.types.Panel):
             row = layout.row()
             row.label(text="Render not ready")
 
-# ---------- Project settings ----------#
-class SettingsOperator(bpy.types.Operator):
-    bl_idname = "object.sed_settings"
-    bl_label = "Set Project Settings"
-    bl_description = "Set the project settings corresponding to the FSCAM_CU135 cameras"
-    bl_options = {'REGISTER', 'UNDO'}
-    
-#   tileSize ne nous concerne pas car on est à la 4.0(faudra voir si ça change des choses si on le rajoute)
-    if bpy.app.version < (3, 0, 0):
-        tileSize: bpy.props.IntProperty(name="Tiles Size", description="Size of the rendering tiles", default=256,
-                                        min=64, max=1024, step=32)
-    renderSamplesNumber: bpy.props.IntProperty(name="Samples", description="Number of samples for rendering",
-                                               default=128, min=16, max=1024, step=16)
 
-    def execute(self, context):
-
-        # Useful variables
-        rdr = context.scene.render
-        cle = context.scene.cycles
-
-        rdr.engine = 'CYCLES'
-        cle.device = 'GPU'
-        cle.samples = self.renderSamplesNumber
-        cle.caustics_reflective = False
-        cle.caustics_refractive = False
-
-        rdr.resolution_x = 4208
-        rdr.resolution_y = 3120
-
-        if bpy.app.version < (3, 0, 0):
-            rdr.tile_x = self.tileSize
-            rdr.tile_y = self.tileSize
-
-        # World settings
-        context.scene.world.use_nodes = False
-        context.scene.world.color = (0, 0, 0)
-
-        return {'FINISHED'}
-
-class InfoSED(bpy.types.PropertyGroup):
-    camNumber: bpy.props.IntProperty(name = "Number of cameras in the whole scanrig collections")
-    collections: bpy.props.BoolProperty(description="Bool for collections creation")
-
-classes = [sedPanel, SettingsOperator, InfoSED]
+classes = [sedPanel]
 
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.types.Scene.InfoSED = bpy.props.PointerProperty(type=InfoSED)
 
 def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
-    del bpy.types.Scene.InfoSED
 
 if __name__ == "__main__":
     register()

@@ -1,4 +1,3 @@
-import os
 import bpy
 
 from SEDcreator import SEDcreator_createCluster
@@ -13,14 +12,21 @@ class SetupOperator(bpy.types.Operator):
 
     def execute(self, context):
         selected = context.selected_objects
+
+        # Setup the SED collections
         self.createSEDCollections(context)
 
         for obj in selected:
             if obj.type == 'EMPTY':
                 SEDcreator_createCluster.create(context, obj)
                 self.linkEmptyToCollection(obj, context)
-        SEDcreator_utils.renumberSEDCameras()
+
+
         context.scene.RenderProperties.renderReady = True  # Set rendering Ready
+
+        # Renumber the SED cameras
+        SEDcreator_utils.renumberSEDCameras(context)
+
         return {'FINISHED'}
 
     def linkEmptyToCollection(self, object, context):
@@ -118,14 +124,15 @@ class SetupProperties(bpy.types.PropertyGroup):
                                      min=3, max=32, step=1)
     nbRing: bpy.props.IntProperty(name="Number of rings", description="Number of sphere's rings", default=8, min=3,
                                   max=16, step=1)
+    # Define the "cube" where the adaptatives shapes can be
     x_max: bpy.props.FloatProperty(name="x maximum", description="Maximum x coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
     x_min: bpy.props.FloatProperty(name="x minimum", description="Minimum x coordinate where cameras are displayed", default=-100, min=-1000, max=1000, step=1)
     y_max: bpy.props.FloatProperty(name="y maximum", description="Maximum y coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
     y_min: bpy.props.FloatProperty(name="y minimum", description="Minimum y coordinate where cameras are displayed", default=-100, min=-1000, max=1000, step=1)
     z_max: bpy.props.FloatProperty(name="z maximum", description="Maximum z coordinate where cameras are displayed", default=100, min=-1000, max=1000, step=1)
     z_min: bpy.props.FloatProperty(name="z minimum", description="Minimum z coordinate where cameras are displayed", default=-100, min=-1000, max=1000, step=1)
-
-    focalLength: bpy.props.FloatProperty(name="Focal length", description="Focal length of all cameras of the cluster in degree)")
+    
+    focalLength: bpy.props.FloatProperty(name="Focal length", description="Focal length of all cameras of the cluster in millimeter)")
 
 
 classes = [SetupOperator, SetupProperties]

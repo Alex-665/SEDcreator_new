@@ -1,7 +1,6 @@
 import bpy
 from SEDcreator import SEDcreator_prepareRender
 from SEDcreator import SEDcreator_render
-from SEDcreator import SEDcreator_renderBeauty
 from SEDcreator import SEDcreator_renderRoughness
 from SEDcreator import SEDcreator_renderCurvature
 
@@ -9,14 +8,13 @@ def launchRender(context, camerasObjs, imgDir):
     renderProp = context.scene.RenderProperties
     frame = renderProp.start
     for cam in camerasObjs:
+        # At one frame corresponds one image of a camera
         context.scene.frame_set(frame)
         cam_data = bpy.data.cameras.new("cam_render")
         cam_obj = bpy.data.objects.new("cam_render", cam_data)
         cam_obj = cam
         cam_obj.name = f"cam_render_{frame}"
         context.scene.camera = cam_obj
-        #if renderProp.bool_beauty:
-        #    SEDcreator_renderBeauty.renderBeauty(context, imgDir, f"{cam_obj.name}")
         if renderProp.bool_roughness:
             SEDcreator_renderRoughness.renderRoughness(context, imgDir, f"{cam_obj.name}")
             SEDcreator_prepareRender.replaceObjectsByOriginals("Roughness", context)

@@ -2,22 +2,27 @@ import bpy
 import math
 
 # Useful functions for all the project
-
-def renumberCamerasCollection(collectionName, startNumber):
+def renumberCamerasCollection(context, collectionName, startNumber):
     endNumber = startNumber
     collection = bpy.data.collections[collectionName].objects
     for obj in collection:
         if obj.type == 'CAMERA':
+            # Check if the Camera_{endNumber} already existed for renumbering correctly
+            new_name = f"Camera_{endNumber}"
+            existingCamera = bpy.data.objects.get(new_name)
+            if existingCamera:
+                bpy.data.objects[new_name].name = "Camera_"
             obj.name = f"Camera_{endNumber}"
             endNumber += 1
     return endNumber
 
-def renumberSEDCameras():
+def renumberSEDCameras(context):
     collectionsName = ["IcoSEDCollection", "SemiIcoSEDCollection", "AdaptativeIcoSEDCollection", "SphereSEDCollection", "SemiSphereSEDCollection", "AdaptativeSphereSEDCollection"]
     number_cam = 0
     for collectionName in collectionsName:
-        number_cam = renumberCamerasCollection(collectionName, number_cam)
+        number_cam = renumberCamerasCollection(context, collectionName, number_cam)
 
+# Create an array of SED cameras
 def getSEDCameras():
     res = []
     collectionsName = ["IcoSEDCollection", "SemiIcoSEDCollection", "AdaptativeIcoSEDCollection", "SphereSEDCollection", "SemiSphereSEDCollection", "AdaptativeSphereSEDCollection"]
@@ -33,7 +38,7 @@ def inCube(obj_location, x_min, x_max, y_min, y_max, z_min, z_max):
 def createCamera(context, lens):
     cam = bpy.data.cameras.new("Camera")
     cam.lens_unit = lens
-    cam.angle = math.radians(context.scene.SetupProperties.focalLength)
+    cam.lens = context.scene.SetupProperties.focalLength
     return cam
 
 def createCameraObj(context, name, cam, loc=(0.0, 0.0, 0.0), rot=(0.0, 0.0, 0.0)):
@@ -50,15 +55,14 @@ def createCameraObj(context, name, cam, loc=(0.0, 0.0, 0.0), rot=(0.0, 0.0, 0.0)
     # Move origin (could be improved)
     active = context.view_layer.objects.active
     context.view_layer.objects.active = obj
-    #bpy.ops.object.origin_set(type='GEOMETRY_ORIGIN', center='MEDIAN')
-    #bpy.ops.object.origin_clear()
     context.view_layer.objects.active = active
 
     return obj
 
+# Create a camera on a vertice of a shape
 def createCameraOnShape(context, object, shape, cam, vertice, position):
     setup_properties = context.scene.SetupProperties
-    camName = f"Camera_{context.scene.InfoSED.camNumber}"
+    camName = f"Camera_"
     current_cam = createCameraObj(context, camName, cam, (object.location.x + setup_properties.clusterRadius, 0, 0), (90, 0, 90))
     #to keep the cameras where they should be after parenting operation
     current_cam.parent = object
@@ -73,12 +77,10 @@ def createCameraOnShape(context, object, shape, cam, vertice, position):
     elif setup_properties.orientationCameras == 'O':
         look_at_out(current_cam, shape.matrix_world.to_translation())
     else:
-       #if len(selected_objet) == 1:
-       #    #il y aura peut être un problème ici avec la liste des objets sélectionnés
-       #    look_at_select(current_cam, selected_objet[0])
-       #else:
-            look_at_in(current_cam, shape.matrix_world.to_translation())
+        focus_object = context.scene.SetFocusProperties.focus_object
+        look_at_select(current_cam, bpy.data.objects[focus_object])
 
+# Delete all children of an object
 def deleteChildren(object):
     children = object.children
     for child in children:
@@ -86,6 +88,7 @@ def deleteChildren(object):
 
 def strVector3(v3):
     return str(v3.x) + "," + str(v3.y) + "," + str(v3.z)
+
 
 def look_at_in(obj_camera, point):
     loc_camera = obj_camera.matrix_world.to_translation()
