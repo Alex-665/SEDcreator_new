@@ -1,4 +1,3 @@
-# Imports
 import bpy
 
 from SEDcreator import SEDcreator_utils
@@ -23,7 +22,7 @@ def create(context, object):
     else:
         bpy.ops.mesh.primitive_uv_sphere_add(segments=setup_properties.nbSegment, ring_count=setup_properties.nbRing, radius=setup_properties.clusterRadius, calc_uvs=True, enter_editmode=False, align='WORLD', location=centerCluster, rotation=(0.0, 0.0, 0.0), scale=(1.0, 1.0, 1.0))
 
-    shape = bpy.context.selected_objects[0]
+    shape = context.selected_objects[0]
     shape.name = "shape_cluster"
     nbVertices = len(shape.data.vertices)
     cam = SEDcreator_utils.createCamera(context, 'MILLIMETERS')

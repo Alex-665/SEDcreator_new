@@ -63,8 +63,7 @@ class RenderOperator(bpy.types.Operator):
         # Get the img folder path
         filePath = bpy.data.filepath
         curDir = os.path.dirname(filePath)
-        imgDir = os.path.join(
-            curDir, context.scene.RenderProperties.exportFolder)
+        imgDir = os.path.join(curDir, renderProp.exportFolder)
 
         # Create the img folder if it does not exist
         os.makedirs(imgDir, exist_ok=True)

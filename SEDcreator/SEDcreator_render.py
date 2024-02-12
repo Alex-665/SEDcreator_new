@@ -1,20 +1,16 @@
-#import sys
 import os
-#import re
 import bpy
-#from glob import glob
 from SEDcreator import SEDcreator_prepareRender
 
 # Render function for all except roughness and curvature
 def render(context, imgDir, imgName):
     # Set up rendering
     scene = context.scene
-    render = context.scene.render
-    renderProp = context.scene.RenderProperties
+    render = scene.render
+    renderProp = scene.RenderProperties
 
     SEDcreator_prepareRender.enableUsePasses(context)
 
-    #ça doit marcher aussi si on ne met que scene.node...
     nodes = scene.node_tree.nodes
     links = scene.node_tree.links
 

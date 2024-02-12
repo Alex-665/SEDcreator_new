@@ -65,24 +65,29 @@ class SetupOperator(bpy.types.Operator):
         return False
 
     def createSEDCollections(self, context):
-        if not self.collectionExists(context, "IcoSEDCollection"):
-            icoCollection = bpy.data.collections.new("IcoSEDCollection")
-            context.scene.collection.children.link(icoCollection)
-        if not self.collectionExists(context, "SemiIcoSEDCollection"):
-            semiIcoCollection = bpy.data.collections.new("SemiIcoSEDCollection")
-            context.scene.collection.children.link(semiIcoCollection)
-        if not self.collectionExists(context, "AdaptativeIcoSEDCollection"):
-            adaptativeIcoCollection = bpy.data.collections.new("AdaptativeIcoSEDCollection")
-            context.scene.collection.children.link(adaptativeIcoCollection)
-        if not self.collectionExists(context, "SphereSEDCollection"):
-            sphereCollection = bpy.data.collections.new("SphereSEDCollection")
-            context.scene.collection.children.link(sphereCollection)
-        if not self.collectionExists(context, "SemiSphereSEDCollection"):
-            semiSphereCollection = bpy.data.collections.new("SemiSphereSEDCollection")
-            context.scene.collection.children.link(semiSphereCollection)
-        if not self.collectionExists(context, "AdaptativeSphereSEDCollection"):
-            adaptativeSphereCollection = bpy.data.collections.new("AdaptativeSphereSEDCollection")
-            context.scene.collection.children.link(adaptativeSphereCollection)
+        collectionsName = ["IcoSEDCollection", "SemiIcoSEDCollection", "AdaptativeIcoSEDCollection", "SphereSEDCollection", "SemiSphereSEDCollection", "AdaptativeSphereSEDCollection"]
+        for collectionName in collectionsName:
+            if not self.collectionExists(context, collectionName):
+                context.scene.collection.children.link(bpy.data.collections.new(collectionName))
+
+        #if not self.collectionExists(context, "IcoSEDCollection"):
+        #    icoCollection = bpy.data.collections.new("IcoSEDCollection")
+        #    context.scene.collection.children.link(icoCollection)
+        #if not self.collectionExists(context, "SemiIcoSEDCollection"):
+        #    semiIcoCollection = bpy.data.collections.new("SemiIcoSEDCollection")
+        #    context.scene.collection.children.link(semiIcoCollection)
+        #if not self.collectionExists(context, "AdaptativeIcoSEDCollection"):
+        #    adaptativeIcoCollection = bpy.data.collections.new("AdaptativeIcoSEDCollection")
+        #    context.scene.collection.children.link(adaptativeIcoCollection)
+        #if not self.collectionExists(context, "SphereSEDCollection"):
+        #    sphereCollection = bpy.data.collections.new("SphereSEDCollection")
+        #    context.scene.collection.children.link(sphereCollection)
+        #if not self.collectionExists(context, "SemiSphereSEDCollection"):
+        #    semiSphereCollection = bpy.data.collections.new("SemiSphereSEDCollection")
+        #    context.scene.collection.children.link(semiSphereCollection)
+        #if not self.collectionExists(context, "AdaptativeSphereSEDCollection"):
+        #    adaptativeSphereCollection = bpy.data.collections.new("AdaptativeSphereSEDCollection")
+        #    context.scene.collection.children.link(adaptativeSphereCollection)
 
 class SetupProperties(bpy.types.PropertyGroup):
 
