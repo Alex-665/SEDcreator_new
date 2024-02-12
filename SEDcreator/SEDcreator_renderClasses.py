@@ -73,12 +73,13 @@ class RenderOperator(bpy.types.Operator):
 
         # Renumber the cameras
         SEDcreator_utils.renumberSEDCameras(context)
-        sedCameras = SEDcreator_utils.getSEDCameras()
+        sedCameras = SEDcreator_utils.getSEDCameras(context)
         # Array of the cameras which render an image
         camerasObjs = sedCameras[renderProp.start:renderProp.end + 1]
 
         print("---------- Rendering start ----------")
         SEDcreator_launchRender.launchRender(context, camerasObjs, imgDir)
+        SEDcreator_utils.renumberSEDCameras(context)
         print("---------- Rendering end ----------")
 
         return {'FINISHED'}

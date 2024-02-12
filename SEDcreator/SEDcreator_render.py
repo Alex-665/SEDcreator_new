@@ -1,13 +1,16 @@
+#import sys
 import os
+#import re
 import bpy
+#from glob import glob
 from SEDcreator import SEDcreator_prepareRender
 
 # Render function for all except roughness and curvature
 def render(context, imgDir, imgName):
     # Set up rendering
     scene = context.scene
-    render = scene.render
-    renderProp = scene.RenderProperties
+    render = context.scene.render
+    renderProp = context.scene.RenderProperties
 
     SEDcreator_prepareRender.enableUsePasses(context)
 
