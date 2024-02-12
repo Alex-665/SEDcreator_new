@@ -3,8 +3,7 @@ import bpy
 from SEDcreator import SEDcreator_utils
 
 # Functions to prepare the rendering
-def prepareRenderBeauty(bool_beauty, context, imgDir, imgName):
-    if bool_beauty:
+def prepareRenderBeauty(context, imgDir, imgName):
         path_beauty = os.path.join(imgDir, "beauty", imgName)
         context.scene.render.filepath = path_beauty
 

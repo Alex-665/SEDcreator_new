@@ -2,25 +2,6 @@ import bpy
 import math
 
 # Useful functions for all the project
-def renumberCamerasCollection(context, collectionName, startNumber):
-    endNumber = startNumber
-    collection = bpy.data.collections[collectionName].objects
-    for obj in collection:
-        if obj.type == 'CAMERA':
-            # Check if the Camera_{endNumber} already existed for renumbering correctly
-            new_name = f"Camera_{endNumber}"
-            existingCamera = bpy.data.objects.get(new_name)
-            if existingCamera:
-                bpy.data.objects[new_name].name = "Camera_"
-            obj.name = f"Camera_{endNumber}"
-            endNumber += 1
-    return endNumber
-
-def renumberSEDCameras(context):
-    collectionsName = ["IcoSEDCollection", "SemiIcoSEDCollection", "AdaptativeIcoSEDCollection", "SphereSEDCollection", "SemiSphereSEDCollection", "AdaptativeSphereSEDCollection"]
-    number_cam = 0
-    for collectionName in collectionsName:
-        number_cam = renumberCamerasCollection(context, collectionName, number_cam)
 
 # Create an array of SED cameras
 def getSEDCameras():
@@ -31,6 +12,20 @@ def getSEDCameras():
             if obj.type == 'CAMERA':
                 res.append(obj)
     return res
+
+# Renumber SED cameras
+def renumberSEDCameras(context):
+    cameras = getSEDCameras()
+    number_cam = 0
+    for cam in cameras:
+        # Check if the Camera_{number_cam} already existed for renumbering correctly
+        new_name = f"Camera_{number_cam}"
+        existing_camera = bpy.data.objects.get(new_name)
+        if existing_camera:
+            bpy.data.objects[new_name].name = "Camera_"
+        cam.name = f"Camera_{number_cam}"
+        number_cam += 1
+        
 # Check if an object is in a cube
 def inCube(obj_location, x_min, x_max, y_min, y_max, z_min, z_max):
     return (obj_location.x >= x_min and obj_location.x <= x_max) and (obj_location.y >= y_min and obj_location.y <= y_max) and (obj_location.z >= z_min and obj_location.z <= z_max)
