@@ -26,8 +26,9 @@ class RenderProperties(bpy.types.PropertyGroup):
                                     description="Render id map",
                                     default=True
                                      )
+    # Beauty is always rendered
     bool_beauty: bpy.props.BoolProperty(name="Beauty",
-                                        description="Beauty render",
+                                        description="Beauty render (always rendered)",
                                         default=True
                                          )
     bool_transmission: bpy.props.BoolProperty(name="Transmission",

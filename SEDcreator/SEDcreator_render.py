@@ -29,7 +29,7 @@ def render(context, imgDir, imgName):
 
     os.chdir("//")
 
-    SEDcreator_prepareRender.prepareRenderBeauty(renderProp.bool_beauty, context, imgDir, imgName)
+    SEDcreator_prepareRender.prepareRenderBeauty(context, imgDir, imgName)
     SEDcreator_prepareRender.prepareRenderDepth(renderProp.bool_depth, nodes, links, format, color_depth, render_layers, imgDir, imgName)
     SEDcreator_prepareRender.prepareRenderNormal(renderProp.bool_normal, nodes, links, format, render_layers, imgDir, imgName)
     SEDcreator_prepareRender.prepareRenderAlbedo(renderProp.bool_albedo, nodes, links, format, color_depth, render_layers, imgDir, imgName)

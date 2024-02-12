@@ -80,6 +80,7 @@ class sedPanel(bpy.types.Panel):
             row4 = pan_col4.row()
             row4.prop(renderProp, "bool_id")
             row4 = pan_col4.row()
+            row4.enabled = False
             row4.prop(renderProp, "bool_beauty")
             row4 = pan_col4.row()
             row4.prop(renderProp, "bool_roughness")
