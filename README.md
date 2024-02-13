@@ -11,3 +11,6 @@ SEDCreator is a Blender add-on which permits to create cluster of cameras in a s
 - Click on the hamburger menu and click on _Save preferences_. You can close this window.
 
 ## How to use
+
+- On the _Sidebar_ of the _View menu_ (or press _n_) you have now a _SEDcreator_ tab.
+- 
