@@ -16,8 +16,11 @@ SEDCreator is a Blender add-on which permits to create cluster of cameras in a s
 
 ### Scene Management
 You can now try to put some cluster in the scene, for that you can :
+
     - Place at least one _Empty_ in the scene and select it (or them) and then click on _Set Project Setup_. 
+
     **Note** : All the setup that you do are effective on the _Empty_ which are selected, if they are not it will not apply anything on them.
+
     - There are several types of clusters with various options on them (radius, focal length of cameras, orientation of cameras), you can try to know what fit better for your project !
 
 ### Delimitations
@@ -28,11 +31,17 @@ Click on that button to create or modify the selected _Empty_.
 
 ### Render Management
 To render, you have to :
+
     - Check the boxes you want to render (_Albedo_, _Depth_, etc).
+
     **Note** : Beauty is rendered by default.
+
     - name the directory you want your renders to be.
+
     **Note** : The directory will be created next to your Blender file.
+
     - _First frame_ and _Last frame_ are the range of cameras you want to render. One camera is equal to one frame (with the corresponding numbers). Let say you want to render only _Camera_11_ to _Camera_32_ you put _First frame = 11_ and _Last frame = 32_.
+    
     - Click on _Start Render_.
 
 ## Two versions
