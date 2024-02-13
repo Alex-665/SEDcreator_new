@@ -58,7 +58,7 @@ class sedPanel(bpy.types.Panel):
         layout.separator()
 
         pan_col3 = layout.column()
-        pan_col3.label(text="Setup cameras")
+        pan_col3.label(text="Setup Cameras")
 
         row3 = pan_col3.row()
         row3.operator('object.sed_setup')
