@@ -97,7 +97,7 @@ class SetupProperties(bpy.types.PropertyGroup):
                                        items={
                                                ('I', 'Inward', 'Orient cameras inward'),
                                                ('O', 'Outward', 'Orient cameras outward'),
-                                               ('F', 'Focus', 'Orient cameras to focus on the selectionned object'),
+                                               ('F', 'Focus', 'Orient cameras to focus on the selectioned object'),
                                              }, default='I')
 
     clusterRadius: bpy.props.FloatProperty(name="Cluster radius",
