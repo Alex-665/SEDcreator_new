@@ -15,13 +15,10 @@ SEDCreator is a Blender add-on which permits to create cluster of cameras in a s
 - On the _Sidebar_ of the _View menu_ (or press _n_) you have now a _SEDcreator_ tab.
 
 ### Scene Management
-You can now try to put some cluster in the scene, for that you can :
-
-    - Place at least one _Empty_ in the scene and select it (or them) and then click on _Set Project Setup_. 
-
-    **Note** : All the setup that you do are effective on the _Empty_ which are selected, if they are not it will not apply anything on them.
-
-    - There are several types of clusters with various options on them (radius, focal length of cameras, orientation of cameras), you can try to know what fit better for your project !
+You can now try to put some cluster in the scene, for that you can :  
+    - Place at least one _Empty_ in the scene and select it (or them) and then click on _Set Project Setup_.  
+    **Note** : All the setup that you do are effective on the _Empty_ which are selected, if they are not it will not apply anything on them. 
+    - There are several types of clusters with various options on them (radius, focal length of cameras, orientation of cameras), you can try to know what fit better for your project !  
 
 ### Delimitations
 The _Delimitations_ are for the _Adaptative Icosahedron_ and _Adaptative UV Sphere_ (only). This is to limit the area of the cameras (i.e. if you place an _Empty_ and some cameras of the cluster are outside the _Delimitations_, they are not created.
