@@ -3,6 +3,13 @@ import math
 
 # Useful functions for all the project
 
+# Check if a string corresponds to an object of the scene
+def objectNameInScene(name):
+    for obj in bpy.data.objects:
+        if obj.name == name:
+            return True
+    return False
+
 # Create an array of visible SED cameras
 def getSEDCameras(context):
     res = []

@@ -6,7 +6,7 @@ bl_info = {
     "name": "SEDcreator",
     "authors": "Maxime Verna, Sara Lafleur, Léa Touchard, Alexandre Miralles",
     "description": "Add-on to create clusters of cameras to create set of image of a scene",
-    "blender": (2, 80, 0),
+    "blender": (4, 0, 0),
     "location": "",
     "warning": "",
     "category": "Generic"
