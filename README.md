@@ -35,5 +35,5 @@ To render, you have to :
     - _First frame_ and _Last frame_ are the range of cameras you want to render. One camera is equal to one frame (with the corresponding numbers). Let say you want to render only _Camera_11_ to _Camera_32_ you put _First frame = 11_ and _Last frame = 32_.
     - Click on _Start Render_.
 
-## The two versions
-
+## Two versions
+There is two versions of this add-on, one on branch _main_ and another on branch _alternative_version_. What changes is the behaviour during rendering. In the first one, if you hide cameras in the viewport they are rendered as if they where in the scene (and they are numbered as if they were there too). Meanwhile in the second version the hidden cameras does not exist for the renderer (they are not numbered and they are never rendered if they are hidden). 
