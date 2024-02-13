@@ -18,7 +18,9 @@ SEDCreator is a Blender add-on which permits to create cluster of cameras in a s
 You can now try to put some cluster in the scene, for that you can : 
 - Place at least one _Empty_ in the scene and select it (or them) and then click on _Set Project Setup_.  
 **Note** : All the setup that you do are effective on the _Empty_ which are selected, if they are not it will not apply anything on them. 
-- There are several types of clusters with various options on them (radius, focal length of cameras, orientation of cameras), you can try to know what fit better for your project !  
+- There are several types of clusters with various options on them (radius, focal length of cameras, orientation of cameras), you can try to know what fit better for your project !
+>[!TIP]
+> The _Focus_ option (in Camera orientation) is a bit tricky : you have to select the object you want your cameras to be focus on and then click on _Set cluster focus_.
 
 ### Delimitations
 The _Delimitations_ are for the _Adaptative Icosahedron_ and _Adaptative UV Sphere_ (only). This is to limit the area of the cameras (i.e. if you place an _Empty_ and some cameras of the cluster are outside the _Delimitations_, they are not created.
@@ -36,4 +38,4 @@ To render, you have to :
 - Click on _Start Render_.
 
 ## Two versions
-There is two versions of this add-on, one on branch _main_ and another on branch _alternative_version_. What changes is the behaviour during rendering. In the first one, if you hide cameras in the viewport they are rendered as if they where in the scene (and they are numbered as if they were there too). Meanwhile in the second version the hidden cameras does not exist for the renderer (they are not numbered and they are never rendered if they are hidden). 
+There are two versions of this add-on, one on branch _main_ and another on branch _alternative_version_. What changes is the behaviour during rendering. In the first one, if you hide cameras in the viewport they are rendered as if they where in the scene (and they are numbered as if they were there too). Meanwhile in the second version the hidden cameras does not exist for the renderer (they are not numbered and they are never rendered if they are hidden). 
