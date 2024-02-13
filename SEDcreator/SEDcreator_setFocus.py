@@ -8,7 +8,7 @@ class SetFocus(bpy.types.Operator):
 
     def execute(self, context):
         selected_objects = context.selected_objects
-        if len(selected_objects) == 0:
+        if len(selected_objects) == 0: 
             self.report({'ERROR'}, "You have no selected objects, please select one object")
         elif len(selected_objects) > 1:
             self.report({'ERROR'}, "You have selected multiple objects, please only select one")
@@ -18,7 +18,7 @@ class SetFocus(bpy.types.Operator):
 
 
 class SetFocusProperties(bpy.types.PropertyGroup):
-    focus_object: bpy.props.StringProperty(name="Focus object", description="Object to be focus on") 
+    focus_object: bpy.props.StringProperty(name="Focus object", default="Not focus", description="Object to be focus on") 
 
 classes = [SetFocus, SetFocusProperties]
 

@@ -15,12 +15,14 @@ class SetupOperator(bpy.types.Operator):
 
         # Setup the SED collections
         self.createSEDCollections(context)
-
-        for obj in selected:
-            if obj.type == 'EMPTY':
-                SEDcreator_createCluster.create(context, obj)
-                self.linkEmptyToCollection(obj, context)
-
+        focus_object = context.scene.SetFocusProperties.focus_object
+        if context.scene.SetupProperties.orientationCameras == 'F' and not SEDcreator_utils.objectNameInScene(focus_object):
+            self.report({'ERROR'}, "You have no selected objects, please select one object")
+        else:
+            for obj in selected:
+                if obj.type == 'EMPTY':
+                    SEDcreator_createCluster.create(context, obj)
+                    self.linkEmptyToCollection(obj, context)
 
         context.scene.RenderProperties.renderReady = True  # Set rendering Ready
 
