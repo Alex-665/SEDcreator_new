@@ -1,5 +1,6 @@
 import os
 import bpy
+import glob
 from SEDcreator import SEDcreator_utils
 
 # Functions to prepare the rendering
@@ -32,8 +33,8 @@ def prepareRenderDepth(bool_depth, nodes, links, format, color_depth, render_lay
             links.new(render_layers.outputs["Depth"], map.inputs[0])
             links.new(map.outputs[0], depth_file_output.inputs[0])
 
-        path_depth = os.path.join(imgDir, "depth", imgName)
-        depth_file_output.file_slots[0].path = path_depth + "_depth"
+        path_depth = os.path.join(imgDir, "depth" , imgName)
+        depth_file_output.file_slots[0].path = path_depth +  "_depth"
 
 def prepareRenderNormal(bool_normal, nodes, links, format, render_layers, imgDir, imgName):
     if bool_normal:
@@ -194,3 +195,14 @@ def replaceObjectsByOriginals(renderType, context):
                 SEDcreator_utils.replaceMaterialByOriginal(obj)
         # Deselect all objects    
         bpy.ops.object.select_all(action='DESELECT')
+
+# Rename correctly all output files (without the xxxx at the end)
+def renameFiles(imgDir, imgName):
+    types = ["depth", "normal", "albedo", "id", "transmission", "curvature", "roughness"]
+    for s in types:
+        dir = os.path.join(imgDir, s)
+        path_depth = os.path.join(dir, imgName)
+        list = glob.glob(path_depth + "*")
+        for l in list:
+            os.rename(l, path_depth + "_" + s)
+
