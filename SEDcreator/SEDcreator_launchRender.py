@@ -22,5 +22,9 @@ def launchRender(context, camerasObjs, imgDir):
             SEDcreator_renderCurvature.renderCurvature(context, imgDir, f"{cam_obj.name}")
             SEDcreator_prepareRender.replaceObjectsByOriginals("Curvature", context)
         SEDcreator_render.render(context, imgDir, f"{cam_obj.name}")
+
+        # Renaming correctly output files
+        SEDcreator_prepareRender.renameFiles(imgDir, f"{cam_obj.name}")
+
         cam_obj.name = f"Camera_{frame}"
         frame+=1

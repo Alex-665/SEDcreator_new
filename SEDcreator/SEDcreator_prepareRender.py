@@ -1,5 +1,6 @@
 import os
 import bpy
+import glob
 from SEDcreator import SEDcreator_utils
 
 # Functions to prepare the rendering
@@ -194,3 +195,13 @@ def replaceObjectsByOriginals(renderType, context):
                 SEDcreator_utils.replaceMaterialByOriginal(obj)
         # Deselect all objects    
         bpy.ops.object.select_all(action='DESELECT')
+
+# Rename correctly all rendered images (without the xxxx at the end)
+def renameFiles(imgDir, imgName):
+    types = ["depth", "normal", "albedo", "id", "transmission", "curvature", "roughness"]
+    for s in types:
+        dir = os.path.join(imgDir, s)
+        path_depth = os.path.join(dir, imgName)
+        list = glob.glob(path_depth + "*")
+        for l in list:
+            os.rename(l, path_depth + "_" + s)
