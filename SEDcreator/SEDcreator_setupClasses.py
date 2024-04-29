@@ -13,6 +13,15 @@ class SetupOperator(bpy.types.Operator):
     def execute(self, context):
         selected = context.selected_objects
 
+        # Set Cycles as the default renderer
+        rdr = context.scene.render
+        cle = context.scene.cycles
+
+        rdr.engine = 'CYCLES'
+        cle.device = 'CPU'
+        #rdr.resolution_x = 4208
+        #rdr.resolution_y = 3120
+
         # Setup the SED collections
         self.createSEDCollections(context)
         focus_object = context.scene.SetFocusProperties.focus_object
