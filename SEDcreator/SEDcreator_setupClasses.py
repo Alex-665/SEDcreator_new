@@ -19,8 +19,6 @@ class SetupOperator(bpy.types.Operator):
 
         rdr.engine = 'CYCLES'
         cle.device = 'CPU'
-        #rdr.resolution_x = 4208
-        #rdr.resolution_y = 3120
 
         # Setup the SED collections
         self.createSEDCollections(context)
