@@ -25,7 +25,6 @@ class SetupOperator(bpy.types.Operator):
         focus_object = context.scene.SetFocusProperties.focus_object
         if context.scene.SetupProperties.orientationCameras == 'F' and not SEDcreator_utils.objectNameInScene(focus_object):
             self.report({'ERROR'}, "You have no selected objects, please select one object")
-
         else:
             for obj in selected:
                 if obj.type == 'EMPTY':
