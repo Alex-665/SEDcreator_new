@@ -12,6 +12,13 @@ class SetupOperator(bpy.types.Operator):
 
     def execute(self, context):
         selected = context.selected_objects
+        
+        # Set Cycles as the default renderer
+        rdr = context.scene.render
+        cle = context.scene.cycles
+
+        rdr.engine = 'CYCLES'
+        cle.device = 'CPU'        
 
         # Setup the SED collections
         self.createSEDCollections(context)
