@@ -12,21 +12,13 @@ def renderRoughness(context, imgDir, imgName):
     SEDcreator_prepareRender.enableUsePasses(context)
 
     nodes = scene.node_tree.nodes
-    links = scene.node_tree.links
+    #links = scene.node_tree.links
 
     # Clear default nodes
     for n in nodes:
         nodes.remove(n)
 
     # Create input render layer node
-    render_layers = nodes.new('CompositorNodeRLayers')
-
-    format = "OPEN_EXR"
-    color_depth = "16"
-
-    #fp = os.path.join(imgDir, imgName)
-    #print(imgDir)
-    #print(imgName)
     os.chdir("//")
 
     SEDcreator_prepareRender.prepareRenderRoughness(renderProp.bool_roughness, context, imgDir, imgName)

@@ -70,7 +70,7 @@ class RenderOperator(bpy.types.Operator):
         os.makedirs(imgDir, exist_ok=True)
 
         # Get the dome shape
-        domeShape = context.scene.SetupProperties.domeShape
+        #domeShape = context.scene.SetupProperties.domeShape
 
         # Renumber the cameras
         SEDcreator_utils.renumberSEDCameras(context)

@@ -6,7 +6,7 @@ from SEDcreator import SEDcreator_prepareRender
 def render(context, imgDir, imgName):
     # Set up rendering
     scene = context.scene
-    render = scene.render
+    #render = scene.render
     renderProp = scene.RenderProperties
 
     SEDcreator_prepareRender.enableUsePasses(context)
