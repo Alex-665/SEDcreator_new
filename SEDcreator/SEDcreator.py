@@ -89,8 +89,6 @@ class sedPanel(bpy.types.Panel):
             row4 = pan_col4.row()
             row4.prop(renderProp, "bool_curvature")
             row4 = pan_col4.row()
-            row4.prop(context.scene.SaveCamerasAttributesProperties, "bool_cameras") # a voir si ne je ne le rajoute pas dans le render aussi comme ça on peut faire les deux a la fois
-            row4 = pan_col4.row()
             row4.prop(renderProp, "exportFolder")
             row4 = pan_col4.row()
             row4.prop(renderProp, "start")

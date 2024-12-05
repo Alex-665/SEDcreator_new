@@ -3,7 +3,6 @@ import os
 import numpy as np
 from SEDcreator import SEDcreator_utils
 
-
 class SaveCamerasAttributesOperator(bpy.types.Operator):
     bl_idname = "object.sed_save_cameras_attributes"
     bl_label = "Save Cameras Attributes"
@@ -31,31 +30,21 @@ class SaveCamerasAttributesOperator(bpy.types.Operator):
         camerasObjs = sedCameras[renderProp.start:renderProp.end + 1]
 
         print("---------- Save cameras attributes start ----------")
-        cameras_locations, cameras_angle = self.launchCamerasAttributes(context, camerasObjs)
-        self.saveCamerasAttributes(context, imgDir, cameras_locations, cameras_angle)
+        cameras_locations, cameras_angle = self.launchCamerasAttributes(camerasObjs)
+        self.saveCamerasAttributes(imgDir, cameras_locations, cameras_angle)
         print("---------- Save cameras attributes end ----------")
 
         return {'FINISHED'}
 
-    def saveCamerasAttributes(self, context, imgDir, cams_locations, cams_angle):
-        # pas sur que ca marche ca
+    def saveCamerasAttributes(self, imgDir, cams_locations, cams_angle):
         cameras_attributes_file = os.path.join(imgDir, "cameras_attributes.npz")
         np.savez(cameras_attributes_file, cameras_locations=cams_locations, cameras_angle=cams_angle)
 
-    def launchCamerasAttributes(self, context, camerasObjs):
-        # code pas optimal mais pas grave
+    def launchCamerasAttributes(self, camerasObjs):
         cameras_locations, cameras_angle = zip(*[(cam.location, cam.location) for cam in camerasObjs])
         cameras_locations = np.array(cameras_locations)
         cameras_angle = np.array(cameras_angle)
-        #for cam in camerasObjs:
-        #    cameras_locations = np.append(cam.location)
-        #    cameras_angle = np.append(cam.angle)
         return cameras_locations, cameras_angle
-
-class SaveCamerasAttributesProperties(bpy.types.PropertyGroup):
-    bool_cameras: bpy.props.BoolProperty(name="Cameras",
-                                         description="Write cameras attributes to a txt file",
-                                         default=True)
 
 classes = [SaveCamerasAttributesProperties, SaveCamerasAttributesOperator]
 
@@ -63,7 +52,6 @@ def register():
     for c in classes:
         bpy.utils.register_class(c)
     bpy.types.Scene.SaveCamerasAttributesProperties = bpy.props.PointerProperty(type=SaveCamerasAttributesProperties)
-
 
 def unregister():
     for c in reversed(classes):
