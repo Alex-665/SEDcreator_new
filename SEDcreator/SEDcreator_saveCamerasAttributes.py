@@ -30,8 +30,8 @@ class SaveCamerasAttributesOperator(bpy.types.Operator):
         camerasObjs = sedCameras[renderProp.start:renderProp.end + 1]
 
         print("---------- Save cameras attributes start ----------")
-        cameras_locations, cameras_angle = self.launchCamerasAttributes(camerasObjs)
-        self.saveCamerasAttributes(imgDir, cameras_locations, cameras_angle)
+        cameras_locations, cameras_angles = self.launchCamerasAttributes(camerasObjs)
+        self.saveCamerasAttributes(imgDir, cameras_locations, cameras_angles)
         print("---------- Save cameras attributes end ----------")
 
         return {'FINISHED'}
@@ -41,22 +41,22 @@ class SaveCamerasAttributesOperator(bpy.types.Operator):
         np.savez(cameras_attributes_file, cameras_locations=cams_locations, cameras_angle=cams_angle)
 
     def launchCamerasAttributes(self, camerasObjs):
-        cameras_locations, cameras_angle = zip(*[(cam.location, cam.location) for cam in camerasObjs])
+        cameras_locations, cameras_angle = zip(*[(cam.location, cam.rotation_euler) for cam in camerasObjs])
         cameras_locations = np.array(cameras_locations)
         cameras_angle = np.array(cameras_angle)
         return cameras_locations, cameras_angle
 
-classes = [SaveCamerasAttributesProperties, SaveCamerasAttributesOperator]
+classes = [SaveCamerasAttributesOperator]
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.types.Scene.SaveCamerasAttributesProperties = bpy.props.PointerProperty(type=SaveCamerasAttributesProperties)
+    #bpy.types.Scene.SaveCamerasAttributesProperties = bpy.props.PointerProperty(type=SaveCamerasAttributesProperties)
 
 def unregister():
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
-    del bpy.types.Scene.SaveCamerasAttributesProperties
+    #del bpy.types.Scene.SaveCamerasAttributesProperties
 
 
 if __name__ == "__main__":
