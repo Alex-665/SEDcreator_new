@@ -62,6 +62,7 @@ def createCameraObj(context, name, cam, loc=(0.0, 0.0, 0.0), rot=(0.0, 0.0, 0.0)
     return obj
 
 # Create a camera on a vertice of a shape
+# vertice inutile ici non ?
 def createCameraOnShape(context, object, shape, cam, vertice, position):
     setup_properties = context.scene.SetupProperties
     camName = f"Camera_"

@@ -82,6 +82,7 @@ class SetupOperator(bpy.types.Operator):
 
 class SetupProperties(bpy.types.PropertyGroup):
 
+    #pas sur qu'il soit utilisé et utile ce renderReady la
     renderReady: bpy.props.BoolProperty(name="Toggle Option")
     domeShape: bpy.props.EnumProperty(name='Shape type', description='Choose the shape of the camera dome',
                                       items={

@@ -83,11 +83,13 @@ class sedPanel(bpy.types.Panel):
             row4.enabled = False
             row4.prop(renderProp, "bool_beauty")
             row4 = pan_col4.row()
+            row4.prop(renderProp, "bool_transmission")
+            row4 = pan_col4.row()
             row4.prop(renderProp, "bool_roughness")
             row4 = pan_col4.row()
             row4.prop(renderProp, "bool_curvature")
             row4 = pan_col4.row()
-            row4.prop(renderProp, "bool_transmission")
+            row4.prop(context.scene.SaveCamerasAttributesProperties, "bool_cameras") # a voir si ne je ne le rajoute pas dans le render aussi comme ça on peut faire les deux a la fois
             row4 = pan_col4.row()
             row4.prop(renderProp, "exportFolder")
             row4 = pan_col4.row()
@@ -96,6 +98,8 @@ class sedPanel(bpy.types.Panel):
             row4.prop(renderProp, "end")
             row4 = pan_col4.row()
             row4.operator('object.sed_render')
+            row4 = pan_col4.row()
+            row4.operator('object.sed_save_cameras_attributes')
         else:
             row = layout.row()
             row.label(text="Render not ready")

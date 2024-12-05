@@ -40,8 +40,8 @@ class RenderProperties(bpy.types.PropertyGroup):
                                               default=True
                                               )
     bool_curvature: bpy.props.BoolProperty(name="Curvature",
-                                              description="Curvature mask",
-                                              default=True
+                                           description="Curvature mask",
+                                           default=True
                                               )
     # First and last frame of the rendering
     start: bpy.props.IntProperty(name="FirstFrame", default=0)

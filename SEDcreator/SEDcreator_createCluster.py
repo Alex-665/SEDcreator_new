@@ -24,13 +24,12 @@ def create(context, object):
 
     shape = context.selected_objects[0]
     shape.name = "shape_cluster"
-    #nbVertices = len(shape.data.vertices) # surement à enlever
     cam = SEDcreator_utils.createCamera(context, 'MILLIMETERS')
 
     # Place a camera on each vertices of the shape
     for (i, _) in enumerate(shape.data.vertices):
         v = shape.data.vertices[i]
-        co_final = shape.matrix_world @ v.co
+        co_final = shape.matrix_world @ v.co # faudra surement utiliser ça pour avoir les positions des cameras (revoir exactement ce que c'est)
 
         if  (domeShape == 'SI'or domeShape == 'SS') and (object.location.z - co_final.z <= 0):
             SEDcreator_utils.createCameraOnShape(context, object, shape, cam, v, co_final)

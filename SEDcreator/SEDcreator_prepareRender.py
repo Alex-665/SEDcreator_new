@@ -185,7 +185,7 @@ def replaceObjectsByOriginals(renderType, context):
         selected = context.selected_objects
 
         if renderType == "Curvature":
-            # Remove Attibute node from all materials
+            # Remove Attribute node from all materials
             SEDcreator_utils.removeAttributeFromAllMaterials()
 
         # Replace all material for these objects by their original texture images

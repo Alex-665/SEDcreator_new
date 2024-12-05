@@ -6,7 +6,6 @@ from SEDcreator import SEDcreator_prepareRender
 def render(context, imgDir, imgName):
     # Set up rendering
     scene = context.scene
-    #render = scene.render
     renderProp = scene.RenderProperties
 
     SEDcreator_prepareRender.enableUsePasses(context)
@@ -36,3 +35,4 @@ def render(context, imgDir, imgName):
     bpy.ops.render.render(write_still=True)  # render still
 
     return
+

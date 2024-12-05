@@ -1,4 +1,5 @@
 import bpy
+import numpy as np
 from SEDcreator import SEDcreator_prepareRender
 from SEDcreator import SEDcreator_render
 from SEDcreator import SEDcreator_renderRoughness
